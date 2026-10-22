@@ -10,6 +10,8 @@ export const Route = createFileRoute("/insights")({
       { name: "description", content: "Your private mood history and mindful minutes." },
       { property: "og:title", content: "Insights — MindSight" },
       { property: "og:description", content: "Review your mood history privately." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Insights,

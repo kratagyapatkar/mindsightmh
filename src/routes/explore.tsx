@@ -9,6 +9,8 @@ export const Route = createFileRoute("/explore")({
       { name: "description", content: "Explore MindSight's tools: guided breathing, private journaling and relaxation." },
       { property: "og:title", content: "Explore — MindSight" },
       { property: "og:description", content: "Guided breathing, private journaling and relaxation — all on your device." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Explore,

@@ -10,6 +10,8 @@ export const Route = createFileRoute("/reflect")({
       { name: "description", content: "A private journal with gentle prompts, stored only on your device." },
       { property: "og:title", content: "Reflect — MindSight" },
       { property: "og:description", content: "Think about your feelings in a private journal." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Reflect,

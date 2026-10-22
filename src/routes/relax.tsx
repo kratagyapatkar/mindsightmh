@@ -10,6 +10,8 @@ export const Route = createFileRoute("/relax")({
       { name: "description", content: "Guided grounding, body scan, muscle relaxation and a calming pause — all offline." },
       { property: "og:title", content: "Relax — MindSight" },
       { property: "og:description", content: "Unwind with short guided practices that run entirely on your device." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Relax,
