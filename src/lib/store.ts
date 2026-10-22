@@ -1,14 +1,16 @@
 import { useEffect, useState, useCallback } from "react";
 
 // All data lives in this browser only (privacy-first, offline).
-export type MoodEntry = { date: string; value: number };
+export type MoodEntry = { date: string; value: number; energy?: number | undefined; tags?: string[] | undefined; note?: string | undefined };
 export type JournalEntry = { id: string; date: string; prompt: string; text: string; mood?: number | undefined };
-export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: number };
+export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: number; practice?: string | undefined; completed?: boolean | undefined };
 
-const KEYS = { name: "ms_name", moods: "ms_moods", journal: "ms_journal", sessions: "ms_sessions" };
+const KEYS = { name: "ms_name", moods: "ms_moods", journal: "ms_journal", sessions: "ms_sessions", onboarded: "ms_onboarded" };
 
 export const MOODS = ["😭", "😢", "😟", "😕", "🙂", "😄", "🤩"];
 export const MOOD_LABELS = ["Terrible", "Very low", "Low", "Okay", "Good", "Great", "Amazing"];
+export const EMOTION_TAGS = ["Calm", "Anxious", "Tired", "Hopeful", "Frustrated", "Excited"];
+export const ENERGY_LEVELS = ["Drained", "Low", "Steady", "Energized", "Buzzing"];
 
 const SCALE_V2 = "ms_scale_v2";
 // One-time rescale of legacy 0-4 mood values to the 0-6 scale.
@@ -60,12 +62,12 @@ export const useName = () => useLocal<string>(KEYS.name, "Aarav");
 export const useMoods = () => useLocal<MoodEntry[]>(KEYS.moods, []);
 export const useJournal = () => useLocal<JournalEntry[]>(KEYS.journal, []);
 export const useSessions = () => useLocal<SessionEntry[]>(KEYS.sessions, []);
+export const useOnboarded = () => useLocal<boolean>(KEYS.onboarded, false);
 
 export const today = () => new Date().toISOString().slice(0, 10);
 
-export function upsertMood(list: MoodEntry[], value: number): MoodEntry[] {
-  const d = today();
-  return [...list.filter((m) => m.date !== d), { date: d, value }];
+export function upsertMood(list: MoodEntry[], entry: MoodEntry): MoodEntry[] {
+  return [...list.filter((m) => m.date !== entry.date), entry];
 }
 
 export function greeting(h = new Date().getHours()) {
