@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dueCalmingReminders, setCalmingReminder, type MoodEntry } from "@/lib/store";
+import { completeCalmingReminder, dueCalmingReminders, setCalmingReminder, upsertMood, type MoodEntry } from "@/lib/store";
 
 const now = Date.parse("2026-10-22T18:22:00Z");
 const list: MoodEntry[] = [{ date: "2026-10-22", value: 2, guidance: [
@@ -26,5 +26,31 @@ describe("private calming reminders", () => {
   it("does not leave a reminder when its saved step is deleted", () => {
     const scheduled = setCalmingReminder(list, "2026-10-22", "calming", "2026-10-22T19:22:00Z", now);
     expect(dueCalmingReminders(scheduled.map((m) => ({ ...m, guidance: m.guidance?.filter((g) => g.id !== "calming") })), now + 7200000)).toEqual([]);
+  });
+  it("records explicit completion and prevents the reminder appearing again", () => {
+    const scheduled = setCalmingReminder(list, "2026-10-22", "calming", "2026-10-22T19:22:00Z", now);
+    const completed = completeCalmingReminder(scheduled, "2026-10-22", "calming", now + 3600000);
+    expect(completed[0]?.guidance?.[0]?.reminderCompletedAt).toBe("2026-10-22T19:22:00.000Z");
+    expect(completed[0]?.guidance?.[0]?.text).toBe("Notice the support beneath you.");
+    expect(dueCalmingReminders(completed, now + 7200000)).toEqual([]);
+  });
+  it("dismissal does not count as completion", () => {
+    const scheduled = setCalmingReminder(list, "2026-10-22", "calming", "2026-10-22T19:22:00Z", now);
+    expect(setCalmingReminder(scheduled, "2026-10-22", "calming")[0]?.guidance?.[0]?.reminderCompletedAt).toBeUndefined();
+  });
+  it("starts a fresh pending reminder when rescheduled after completion", () => {
+    const scheduled = setCalmingReminder(list, "2026-10-22", "calming", "2026-10-22T19:22:00Z", now);
+    const completed = completeCalmingReminder(scheduled, "2026-10-22", "calming", now + 3600000);
+    const again = setCalmingReminder(completed, "2026-10-22", "calming", "2026-10-22T20:22:00Z", now + 3600000);
+    expect(again[0]?.guidance?.[0]?.reminderCompletedAt).toBeUndefined();
+    expect(dueCalmingReminders(again, now + 7200000)).toHaveLength(1);
+  });
+  it("keeps completion when the check-in mood changes", () => {
+    const scheduled = setCalmingReminder(list, "2026-10-22", "calming", "2026-10-22T19:22:00Z", now);
+    const completed = completeCalmingReminder(scheduled, "2026-10-22", "calming", now + 3600000);
+    expect(upsertMood(completed, { date: "2026-10-22", value: 5 })[0]?.guidance?.[0]?.reminderCompletedAt).toBe("2026-10-22T19:22:00.000Z");
+  });
+  it("cannot mark an unscheduled step completed", () => {
+    expect(completeCalmingReminder(list, "2026-10-22", "calming", now)[0]?.guidance?.[0]?.reminderCompletedAt).toBeUndefined();
   });
 });

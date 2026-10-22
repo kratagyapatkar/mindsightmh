@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Bell, BellOff, Clock } from "lucide-react";
+import { Bell, BellOff, Check, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { SavedGuidance } from "@/lib/store";
 
-export function CalmingReminder({ guidance, onChange }: { guidance: SavedGuidance; onChange: (time?: string) => void }) {
+export function CalmingReminder({ guidance, onChange, onComplete }: { guidance: SavedGuidance; onChange: (time?: string) => void; onComplete: () => void }) {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState("");
   const [error, setError] = useState("");
@@ -12,10 +12,14 @@ export function CalmingReminder({ guidance, onChange }: { guidance: SavedGuidanc
     catch (e) { setError(e instanceof Error ? e.message : "Could not save this reminder on your device."); }
   }
   return <div className="mt-3 space-y-2">
+    {guidance.reminderCompletedAt && <p role="status" className="flex items-start gap-2 text-xs font-semibold text-primary"><Check className="size-4 shrink-0" aria-hidden="true" /><span>Reminder completed · {new Date(guidance.reminderCompletedAt).toLocaleString()}</span></p>}
     {guidance.reminderAt && <p className="flex items-start gap-2 text-xs text-muted-foreground"><Clock className="size-4 shrink-0" aria-hidden="true" /><span>Private reminder: {new Date(guidance.reminderAt).toLocaleString()}</span></p>}
     <div className="flex flex-wrap gap-1">
-      <Button variant="ghost" size="sm" onClick={() => setOpen(!open)} aria-expanded={open}><Bell />{guidance.reminderAt ? "Change reminder" : "Remind me later"}</Button>
-      {guidance.reminderAt && <Button variant="ghost" size="sm" onClick={() => { try { onChange(); setError(""); } catch { setError("Could not cancel this reminder on your device."); } }}><BellOff />Cancel reminder</Button>}
+      <Button variant="ghost" size="sm" onClick={() => setOpen(!open)} aria-expanded={open}><Bell />{guidance.reminderCompletedAt ? "Remind me again" : guidance.reminderAt ? "Change reminder" : "Remind me later"}</Button>
+      {guidance.reminderAt && !guidance.reminderCompletedAt && <>
+        <Button variant="secondary" size="sm" onClick={() => { try { onComplete(); setOpen(false); setError(""); } catch { setError("Could not save completion on your device."); } }}><Check />Mark completed</Button>
+        <Button variant="ghost" size="sm" onClick={() => { try { onChange(); setError(""); } catch { setError("Could not cancel this reminder on your device."); } }}><BellOff />Cancel reminder</Button>
+      </>}
     </div>
     {open && <div className="space-y-3 border-t border-border pt-3">
       <p className="text-xs text-muted-foreground">Only appears inside MindSight while it’s open, or when you return after this time. No device notifications, emails, or sharing.</p>
