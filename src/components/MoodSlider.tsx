@@ -71,6 +71,7 @@ export function MoodSlider() {
               className="flex flex-col items-center outline-none"
             >
               <span
+                aria-hidden="true"
                 key={selected ? `sel-${value}` : `idle-${i}`}
                 className={`inline-block text-3xl transition ${selected ? "scale-125" : "opacity-70 hover:opacity-100"}`}
                 style={{ animation: `${FEEL[i]} ${selected ? 1.1 : 2.6}s ease-in-out ${selected ? 0 : i * 0.15}s infinite` }}
@@ -92,11 +93,14 @@ export function MoodSlider() {
         aria-valuetext={MOOD_LABELS[value]}
         className="mood mt-5 w-full"
       />
+      <span role="status" aria-live="polite" className="sr-only">
+        Mood set to {MOOD_LABELS[value]}, {value + 1} of {MOODS.length}
+      </span>
       <div className="mt-1 flex justify-between text-xs text-muted-foreground">
         <span>{MOOD_LABELS[0]}</span>
         <span>{MOOD_LABELS[MOOD_LABELS.length - 1]}</span>
       </div>
-      <p className="mt-3 text-center text-sm font-semibold text-muted-foreground" aria-live="polite">
+      <p className="mt-3 text-center text-sm font-semibold text-muted-foreground">
         {MOODS[value]} {MOOD_LABELS[value]}
       </p>
       </>)}
