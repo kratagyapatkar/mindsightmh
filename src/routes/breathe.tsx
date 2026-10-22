@@ -38,7 +38,7 @@ function Breathe() {
 
   const elapsed = minutes * 60 - left;
   const running = phase === "running" || phase === "paused";
-  const breath = phase === "running" ? ((elapsed % 8 < 4 ? "Breathe in" : "Breathe out") as const) : null;
+  const breath = phase === "running" ? (elapsed % 8 < 4 ? "Breathe in" : "Breathe out") : null;
 
   const recordPartial = () => {
     if (elapsed >= 30) setSessions([...sessions, { date: today(), kind: "breathe", minutes: Math.max(1, Math.round(elapsed / 60)), practice: "Breathing", completed: false }]);
