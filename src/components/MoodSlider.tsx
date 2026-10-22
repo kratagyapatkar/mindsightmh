@@ -9,6 +9,7 @@ export function MoodSlider() {
   const [tags, setTags] = useState<string[]>(saved?.tags ?? []);
   const [note, setNote] = useState(saved?.note ?? "");
   const [justSaved, setJustSaved] = useState(false);
+  const [tab, setTab] = useState<"mood" | "details">("mood");
 
   // Sync the draft once today's saved entry loads (or changes elsewhere).
   const savedKey = JSON.stringify(saved ?? null);
@@ -146,6 +147,8 @@ export function MoodSlider() {
         placeholder="A few words about today…"
         className="mt-2 w-full resize-none rounded-2xl bg-surface p-4 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
       />
+      </>)}
+
 
       <button
         onClick={save}
