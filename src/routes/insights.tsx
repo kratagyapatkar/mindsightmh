@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Bookmark, Leaf, MessageCircle, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { AppShell, PageTitle } from "@/components/AppShell";
 import { ENERGY_LEVELS, MOODS, MOOD_LABELS, upsertMood, useJournal, useMoods, useSessions } from "@/lib/store";
 
@@ -7,9 +9,9 @@ export const Route = createFileRoute("/insights")({
   head: () => ({
     meta: [
       { title: "Insights — MindSight" },
-      { name: "description", content: "Your private mood history and mindful minutes." },
+      { name: "description", content: "Revisit your mood check-ins, saved AI reflections and calming steps privately on your device." },
       { property: "og:title", content: "Insights — MindSight" },
-      { property: "og:description", content: "Review your mood history privately." },
+      { property: "og:description", content: "Review mood history and saved personalized guidance, stored only on your device." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -114,6 +116,20 @@ function Insights() {
                 </div>
               )}
               {m.note && editing !== m.date && <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">{m.note}</p>}
+              {!!m.guidance?.length && <div className="mt-4 border-t border-border pt-3">
+                <p className="flex items-center gap-2 text-xs font-semibold text-primary"><Bookmark className="size-4" aria-hidden="true" /> Saved AI suggestions ({m.guidance.length})</p>
+                {m.guidance.map((g) => <details key={g.id} className="mt-3 border-l-2 border-primary pl-3">
+                  <summary className="cursor-pointer text-sm font-semibold text-primary">
+                    <span className="ml-1 inline-flex items-center gap-2">{g.kind === "reflection" ? <MessageCircle className="size-4" aria-hidden="true" /> : <Leaf className="size-4" aria-hidden="true" />}{g.kind === "reflection" ? "Reflection prompt" : "Calming step"}</span>
+                  </summary>
+                  <p className="mt-2 text-xs text-muted-foreground">Saved {new Date(g.savedAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })} · Mood then: {MOOD_LABELS[g.mood]}</p>
+                  <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed">{g.text}</p>
+                  <Button variant="ghost" size="sm" className="mt-2 text-destructive" aria-label={`Remove saved ${g.kind === "reflection" ? "reflection prompt" : "calming step"}`} onClick={() => {
+                    if (confirm("Remove this saved suggestion? Your check-in will stay.")) setMoods(upsertMood(moods, { ...m, guidance: m.guidance?.filter((item) => item.id !== g.id) }));
+                  }}><Trash2 /> Remove</Button>
+                </details>)}
+                <p className="mt-3 text-xs text-muted-foreground">AI suggestions are not medical advice.</p>
+              </div>}
             </li>
           ))}
         </ul>

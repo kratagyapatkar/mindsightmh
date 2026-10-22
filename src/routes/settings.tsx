@@ -38,10 +38,10 @@ function Settings() {
         <div className="rounded-3xl border bg-surface p-5">
           <p className="font-semibold text-primary">Your privacy, in plain words</p>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
-            <li><span className="font-semibold text-primary">What's stored:</span> your mood check-ins, journal entries, practice sessions and name.</li>
+            <li><span className="font-semibold text-primary">What's stored:</span> your mood check-ins, any AI suggestions you choose to save, journal entries, practice sessions and name.</li>
             <li><span className="font-semibold text-primary">Where:</span> saved check-ins, journals, sessions and your name stay only in this browser, on this device. No account is needed.</li>
             <li><span className="font-semibold text-primary">Optional AI:</span> only when you agree, your selected mood and optionally your note are sent to Lovable AI to generate guidance. Internet is required. MindSight does not store these requests on its server; AI service processing is separate from on-device storage. Your journal, history and name are never included.</li>
-            <li><span className="font-semibold text-primary">Your choice:</span> saving a check-in never sends it to AI. AI suggestions are temporary and are not saved to your mood history.</li>
+            <li><span className="font-semibold text-primary">Your choice:</span> saving a check-in never sends it to AI. Suggestions are temporary unless you choose to save them to check-in history on this device. Saved suggestions are included in exports and removed when you delete their check-in or erase all data.</li>
             <li><span className="font-semibold text-primary">Deletion:</span> erasing below removes everything from this browser permanently.</li>
             <li><span className="font-semibold text-primary">Backups:</span> if your browser syncs data or your device backs up browser storage, copies may be included there — that's controlled by your browser and device settings, not by MindSight.</li>
           </ul>

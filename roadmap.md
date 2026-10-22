@@ -1,3 +1,5 @@
 - [x] Add consented mood-and-note AI guidance with streamed results and Stop.
 - [x] Preserve local-only saved data and update privacy statements.
 - [x] Test validation, error handling, and live guidance flow.
+- [ ] Save completed AI suggestions locally and revisit/remove them in check-in history.
+- [ ] Verify persistence, check-in updates, and incomplete-result safeguards.

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MoodGuidance } from "@/components/MoodGuidance";
-import { EMOTION_TAGS, ENERGY_LEVELS, MOODS, MOOD_LABELS, today, upsertMood, useMoods } from "@/lib/store";
+import { EMOTION_TAGS, ENERGY_LEVELS, MOODS, MOOD_LABELS, saveMoodGuidance, today, upsertMood, useMoods } from "@/lib/store";
 
 // Each mood gets a personality: sob, droop, fidget, shrug, sway, bounce, party.
 const FEEL = ["feel-sob", "feel-droop", "feel-fidget", "feel-shrug", "feel-sway", "feel-bounce", "feel-party"];
@@ -167,7 +167,13 @@ export function MoodSlider() {
       <p className="mt-3 text-center text-xs text-muted-foreground">
         This is self-reflection, not a diagnosis — one emoji can't capture everything you feel.
       </p>
-      <MoodGuidance mood={value} note={note} />
+      <MoodGuidance mood={value} note={note} onSave={(suggestion) => {
+        setMoods(saveMoodGuidance(moods, {
+          date: today(), value, energy,
+          tags: tags.length ? tags : undefined,
+          note: note.trim() || undefined,
+        }, suggestion));
+      }} />
     </div>
   );
 }
