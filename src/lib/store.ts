@@ -102,11 +102,22 @@ export function clearAll() {
   window.dispatchEvent(new Event("ms-store"));
 }
 
+export function getAllData() {
+  // Backups are a read-only snapshot; never migrate or rewrite saved values here.
+  return Object.fromEntries(Object.entries(KEYS).map(([name, key]) => {
+    const raw = localStorage.getItem(key);
+    return [name, raw === null ? null : JSON.parse(raw)];
+  }));
+}
+
 export function exportAll() {
-  const data = Object.fromEntries(Object.entries(KEYS).map(([n, k]) => [n, read(k, null)]));
+  const data = getAllData();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = `mindsight-${today()}.json`;
+  document.body.appendChild(a);
   a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 30_000);
 }
