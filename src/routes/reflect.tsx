@@ -16,11 +16,10 @@ export const Route = createFileRoute("/reflect")({
 });
 
 const PROMPTS = [
-  "What's one thing that went well today?",
-  "What's weighing on your mind right now?",
-  "Who or what are you grateful for?",
-  "What would make tomorrow a little easier?",
-  "How did your body feel today?",
+  "What am I feeling right now?",
+  "What might have contributed to this feeling?",
+  "What do I need at this moment?",
+  "What is one small thing I could do for myself?",
 ];
 
 function Reflect() {
@@ -46,7 +45,7 @@ function Reflect() {
         <div className="rounded-3xl bg-card p-5">
           <div className="flex items-start justify-between gap-3">
             <p className="font-semibold text-primary">{PROMPTS[i]}</p>
-            <button onClick={() => setI((i + 1) % PROMPTS.length)} className="shrink-0 text-sm font-semibold text-accent">New prompt</button>
+            <button onClick={() => setI((i + 1) % PROMPTS.length)} className="shrink-0 text-sm font-semibold text-accent">Skip prompt</button>
           </div>
           <textarea value={text} onChange={(e) => setText(e.target.value)} rows={5} placeholder="Start writing…"
             className="mt-4 w-full resize-none rounded-2xl bg-surface p-4 text-foreground outline-none focus:ring-2 focus:ring-ring" />

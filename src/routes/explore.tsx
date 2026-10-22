@@ -17,7 +17,7 @@ export const Route = createFileRoute("/explore")({
 const tools = [
   { to: "/breathe", label: "Breathe", desc: "Guided breathing with a calm visual timer.", Icon: LungsIcon },
   { to: "/reflect", label: "Reflect", desc: "A private journal with gentle prompts.", Icon: CalendarIcon },
-  { to: "/relax", label: "Relax", desc: "Wind down with soothing sessions.", Icon: BrainIcon },
+  { to: "/relax", label: "Relax", desc: "Grounding, body scan, muscle relaxation and a calming pause.", Icon: BrainIcon },
 ] as const;
 
 function Explore() {
