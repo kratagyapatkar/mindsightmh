@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 
 // All data lives in this browser only (privacy-first, offline).
 export type MoodEntry = { date: string; value: number };
-export type JournalEntry = { id: string; date: string; prompt: string; text: string; mood?: number };
+export type JournalEntry = { id: string; date: string; prompt: string; text: string; mood?: number | undefined };
 export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: number };
 
 const KEYS = { name: "ms_name", moods: "ms_moods", journal: "ms_journal", sessions: "ms_sessions" };
