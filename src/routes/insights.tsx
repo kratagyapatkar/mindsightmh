@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bookmark, Leaf, MessageCircle, Trash2 } from "lucide-react";
+import { Bookmark, Check, Leaf, MessageCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppShell, PageTitle } from "@/components/AppShell";
 import { CalmingReminder } from "@/components/CalmingReminder";
-import { ENERGY_LEVELS, MOODS, MOOD_LABELS, setCalmingReminder, upsertMood, useJournal, useMoods, useSessions } from "@/lib/store";
+import { completeCalmingReminder, ENERGY_LEVELS, MOODS, MOOD_LABELS, setCalmingReminder, upsertMood, useJournal, useMoods, useSessions } from "@/lib/store";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -122,10 +122,11 @@ function Insights() {
                 {m.guidance.map((g) => <details key={g.id} className="mt-3 border-l-2 border-primary pl-3">
                   <summary className="cursor-pointer text-sm font-semibold text-primary">
                     <span className="ml-1 inline-flex items-center gap-2">{g.kind === "reflection" ? <MessageCircle className="size-4" aria-hidden="true" /> : <Leaf className="size-4" aria-hidden="true" />}{g.kind === "reflection" ? "Reflection prompt" : "Calming step"}</span>
+                    {g.kind === "calming" && g.reminderCompletedAt && <span className="mt-1 ml-1 flex items-center gap-1 text-xs font-normal text-muted-foreground"><Check className="size-3" aria-hidden="true" />Reminder completed</span>}
                   </summary>
                   <p className="mt-2 text-xs text-muted-foreground">Saved {new Date(g.savedAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })} · Mood then: {MOOD_LABELS[g.mood]}</p>
                   <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed">{g.text}</p>
-                  {g.kind === "calming" && <CalmingReminder guidance={g} onChange={(time) => setMoods(setCalmingReminder(moods, m.date, g.id, time))} />}
+                  {g.kind === "calming" && <CalmingReminder guidance={g} onChange={(time) => setMoods(setCalmingReminder(moods, m.date, g.id, time))} onComplete={() => setMoods(completeCalmingReminder(moods, m.date, g.id))} />}
                   <Button variant="ghost" size="sm" className="mt-2 text-destructive" aria-label={`Remove saved ${g.kind === "reflection" ? "reflection prompt" : "calming step"}`} onClick={() => {
                     if (confirm("Remove this saved suggestion? Your check-in will stay.")) setMoods(upsertMood(moods, { ...m, guidance: m.guidance?.filter((item) => item.id !== g.id) }));
                   }}><Trash2 /> Remove</Button>

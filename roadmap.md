@@ -5,3 +5,4 @@
 - [x] Verify persistence, check-in updates, and incomplete-result safeguards.
 - [x] Add optional local calming-step reminders with scheduling, cancellation, and private due reminders.
 - [x] Verify due timing, persistence, and revisiting a saved step.
+- [x] Mark reminders completed and show completion in history; verify local persistence and dismiss distinction.

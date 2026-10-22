@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bell, Check, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { dueCalmingReminders, setCalmingReminder, useMoods } from "@/lib/store";
+import { completeCalmingReminder, dueCalmingReminders, setCalmingReminder, useMoods } from "@/lib/store";
 
 export function CalmingReminderNotice() {
   const [moods, setMoods] = useMoods();
@@ -34,7 +34,11 @@ export function CalmingReminderNotice() {
     </div>}
     <div className="mt-3 flex flex-wrap gap-2">
       <Button variant="secondary" size="sm" aria-expanded={revealed === key} onClick={() => setRevealed(revealed === key ? null : key)}><Leaf />{revealed === key ? "Hide step" : "Revisit calming step"}</Button>
-      <Button variant="ghost" size="sm" onClick={dismiss}><Check />{revealed === key ? "Done" : "Dismiss"}</Button>
+      <Button variant="secondary" size="sm" onClick={() => {
+        try { setMoods(completeCalmingReminder(moods, due.date, due.guidance.id)); setRevealed(null); setError(""); }
+        catch { setError("Could not save completion on your device."); }
+      }}><Check />Mark completed</Button>
+      <Button variant="ghost" size="sm" onClick={dismiss}>Dismiss</Button>
     </div>
     {error && <p role="alert" className="mt-2 text-xs text-destructive">{error}</p>}
   </aside>;
