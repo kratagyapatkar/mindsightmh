@@ -7,11 +7,28 @@ export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: n
 
 const KEYS = { name: "ms_name", moods: "ms_moods", journal: "ms_journal", sessions: "ms_sessions" };
 
-export const MOODS = ["😢", "😟", "😐", "🙂", "😀"];
-export const MOOD_LABELS = ["Very low", "Low", "Okay", "Good", "Great"];
+export const MOODS = ["😭", "😢", "😟", "😕", "🙂", "😄", "🤩"];
+export const MOOD_LABELS = ["Terrible", "Very low", "Low", "Okay", "Good", "Great", "Amazing"];
+
+const SCALE_V2 = "ms_scale_v2";
+// One-time rescale of legacy 0-4 mood values to the 0-6 scale.
+function migrateScale() {
+  try {
+    if (localStorage.getItem(SCALE_V2)) return;
+    const moods = read<MoodEntry[]>(KEYS.moods, []);
+    if (moods.length) localStorage.setItem(KEYS.moods, JSON.stringify(moods.map((m) => ({ ...m, value: Math.round(m.value * 1.5) }))));
+    const journal = read<JournalEntry[]>(KEYS.journal, []);
+    if (journal.some((j) => j.mood !== undefined))
+      localStorage.setItem(KEYS.journal, JSON.stringify(journal.map((j) => (j.mood === undefined ? j : { ...j, mood: Math.round(j.mood * 1.5) }))));
+    localStorage.setItem(SCALE_V2, "1");
+  } catch {
+    // ignore
+  }
+}
 
 function read<T>(key: string, fallback: T): T {
   try {
+    migrateScale();
     const raw = localStorage.getItem(key);
     return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
