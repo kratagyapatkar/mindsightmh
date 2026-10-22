@@ -51,7 +51,7 @@ export async function handleMoodGuidance(request: Request): Promise<Response> {
   const onAbort = () => abort.abort(request.signal.reason);
   request.signal.addEventListener("abort", onAbort, { once: true });
   if (request.signal.aborted) onAbort();
-  const aiRequest = new Request(request, { signal: abort.signal });
+  const aiRequest = new Request(request.url, { headers: request.headers, signal: abort.signal });
   const { result } = createResponsesCall(aiRequest, {
     baseURL: "https://ai.gateway.lovable.dev/v1",
     apiKey,
