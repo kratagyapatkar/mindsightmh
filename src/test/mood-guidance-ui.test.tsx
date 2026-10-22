@@ -2,6 +2,11 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MoodGuidance } from "@/components/MoodGuidance";
+import type { ReactNode } from "react";
+
+vi.mock("@tanstack/react-router", () => ({
+  Link: ({ children, to }: { children: ReactNode; to: string }) => <a href={to}>{children}</a>,
+}));
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -16,7 +21,7 @@ describe("consented AI sharing flow", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "I agree to share this check-in with AI." }));
     fireEvent.click(screen.getByRole("button", { name: "Get my suggestion" }));
     await screen.findByRole("alert");
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ mood: 2, note: "", kind: "reflection", consent: true });
+    expect(JSON.parse(fetchMock.mock.calls[0]?.[1]?.body ?? "null")).toEqual({ mood: 2, note: "", kind: "reflection", consent: true });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -30,7 +35,7 @@ describe("consented AI sharing flow", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "I agree to share this check-in with AI." }));
     fireEvent.click(screen.getByRole("button", { name: "Get my suggestion" }));
     await act(async () => fireEvent.click(screen.getByRole("button", { name: "Stop AI guidance" })));
-    await waitFor(() => expect(fetchMock.mock.calls[0][1].signal.aborted).toBe(true));
+    await waitFor(() => expect(fetchMock.mock.calls[0]?.[1]?.signal.aborted).toBe(true));
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
