@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 
 // All data lives in this browser only (privacy-first, offline).
-export type MoodEntry = { date: string; value: number; energy?: number | undefined; tags?: string[] | undefined; note?: string | undefined };
+export type SavedGuidance = { id: string; kind: "reflection" | "calming"; text: string; savedAt: string; mood: number };
+export type MoodEntry = { date: string; value: number; energy?: number | undefined; tags?: string[] | undefined; note?: string | undefined; guidance?: SavedGuidance[] | undefined };
 export type JournalEntry = { id: string; date: string; prompt: string; text: string; mood?: number | undefined };
 export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: number; practice?: string | undefined; completed?: boolean | undefined };
 
@@ -67,7 +68,14 @@ export const useOnboarded = () => useLocal<boolean>(KEYS.onboarded, false);
 export const today = () => new Date().toISOString().slice(0, 10);
 
 export function upsertMood(list: MoodEntry[], entry: MoodEntry): MoodEntry[] {
-  return [...list.filter((m) => m.date !== entry.date), entry];
+  const existing = list.find((m) => m.date === entry.date);
+  return [...list.filter((m) => m.date !== entry.date), { ...entry, guidance: entry.guidance ?? existing?.guidance }];
+}
+
+export function saveMoodGuidance(list: MoodEntry[], entry: MoodEntry, suggestion: SavedGuidance): MoodEntry[] {
+  const guidance = list.find((m) => m.date === entry.date)?.guidance ?? [];
+  if (guidance.some((g) => g.id === suggestion.id)) return list;
+  return upsertMood(list, { ...entry, guidance: [...guidance, suggestion] });
 }
 
 export function greeting(h = new Date().getHours()) {

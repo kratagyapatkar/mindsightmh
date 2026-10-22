@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Leaf, MessageCircle, Sparkles, Square } from "lucide-react";
+import { Bookmark, Check, Leaf, MessageCircle, Sparkles, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MOOD_LABELS, MOODS } from "@/lib/store";
+import { MOOD_LABELS, MOODS, type SavedGuidance } from "@/lib/store";
 import { safeGatewayError, type GuidanceEvent } from "@/lib/mood-guidance";
 
-export function MoodGuidance({ mood, note }: { mood: number; note: string }) {
+export function MoodGuidance({ mood, note, onSave }: { mood: number; note: string; onSave?: (suggestion: SavedGuidance) => void }) {
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<"reflection" | "calming">("reflection");
   const [consent, setConsent] = useState(false);
@@ -15,16 +15,20 @@ export function MoodGuidance({ mood, note }: { mood: number; note: string }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [stopped, setStopped] = useState(false);
+  const [complete, setComplete] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const resultId = useRef("");
   const controller = useRef<AbortController | null>(null);
   useEffect(() => () => controller.current?.abort(), []);
   // Changed inputs require a fresh sharing decision; old results are never relabeled.
-  useEffect(() => { controller.current?.abort(); setConsent(false); setText(""); setError(""); setStopped(false); }, [mood, note, kind, includeNote]);
+  useEffect(() => { controller.current?.abort(); setConsent(false); setText(""); setError(""); setStopped(false); setComplete(false); setSaved(false); }, [mood, note, kind, includeNote]);
 
   async function generate() {
     if (!consent || loading) return;
     const abort = new AbortController();
     controller.current = abort;
     setLoading(true); setStopped(false); setText(""); setError("");
+    setComplete(false); setSaved(false); resultId.current = crypto.randomUUID();
     try {
       const response = await fetch("/api/mood-guidance", {
         method: "POST", headers: { "Content-Type": "application/json" }, signal: abort.signal,
@@ -58,6 +62,7 @@ export function MoodGuidance({ mood, note }: { mood: number; note: string }) {
       pending += decoder.decode();
       consume(pending);
       if (!finished) throw new Error("AI guidance ended before completing. Your check-in has not been changed.");
+      if (!abort.signal.aborted) setComplete(true);
     } catch (e) {
       if (abort.signal.aborted) setStopped(true);
       else setError(e instanceof Error ? e.message : "AI guidance is unavailable. Check your connection.");
@@ -91,6 +96,17 @@ export function MoodGuidance({ mood, note }: { mood: number; note: string }) {
         </div>
         <p role="status" className="sr-only">{loading ? "AI guidance is being prepared." : stopped ? "AI guidance stopped." : error ? "AI guidance failed." : text ? "Your personalized suggestion is ready." : ""}</p>
         {text && <div className="border-l-2 border-primary pl-4"><h3 className="text-sm font-semibold text-primary">{kind === "reflection" ? "Your reflection prompt" : "Your calming next step"}</h3><p className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed">{text}</p></div>}
+        {complete && !loading && !error && !stopped && text.trim() && onSave && <>
+          <Button variant="secondary" disabled={saved} className="h-auto min-h-10 w-full whitespace-normal" onClick={() => {
+            try {
+              onSave({ id: resultId.current, kind, text: text.trim(), savedAt: new Date().toISOString(), mood });
+              setSaved(true);
+            } catch {
+              setError("Could not save on this device. Check that browser storage is available.");
+            }
+          }}>{saved ? <Check /> : <Bookmark />}{saved ? "Saved to check-in history" : "Save to check-in history"}</Button>
+          {saved ? <Button variant="link" asChild><Link to="/insights">View saved suggestion</Link></Button> : <p className="text-xs text-muted-foreground">Saves this suggestion and your current check-in on this device only.</p>}
+        </>}
         {stopped && <p className="text-xs text-muted-foreground">Stopped. Any partial suggestion is incomplete.</p>}
         {error && <p role="alert" className="break-words text-sm text-destructive">{error}</p>}
         <p className="text-xs text-muted-foreground">AI can be wrong. This is not medical advice or crisis support. If you are in immediate danger, contact local emergency services or a trusted person now.</p>

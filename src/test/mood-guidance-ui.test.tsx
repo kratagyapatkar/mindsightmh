@@ -38,4 +38,31 @@ describe("consented AI sharing flow", () => {
     await waitFor(() => expect(fetchMock.mock.calls[0]?.[1]?.signal.aborted).toBe(true));
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+
+  it("saves a completed reflection only after an explicit save", async () => {
+    const onSave = vi.fn();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response('{"type":"text","text":"What would help today?"}\n{"type":"done"}\n')));
+    render(<MoodGuidance mood={2} note="" onSave={onSave} />);
+    fireEvent.click(screen.getByRole("button", { name: /A little support/ }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "I agree to share this check-in with AI." }));
+    fireEvent.click(screen.getByRole("button", { name: "Get my suggestion" }));
+    const save = await screen.findByRole("button", { name: "Save to check-in history" });
+    expect(onSave).not.toHaveBeenCalled();
+    fireEvent.click(save);
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onSave.mock.calls[0]?.[0]).toMatchObject({ kind: "reflection", mood: 2, text: "What would help today?" });
+    expect(screen.getByRole("button", { name: "Saved to check-in history" })).toBeDisabled();
+  });
+
+  it("does not allow saving an incomplete suggestion", async () => {
+    const onSave = vi.fn();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response('{"type":"text","text":"Incomplete suggestion"}\n')));
+    render(<MoodGuidance mood={2} note="" onSave={onSave} />);
+    fireEvent.click(screen.getByRole("button", { name: /A little support/ }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "I agree to share this check-in with AI." }));
+    fireEvent.click(screen.getByRole("button", { name: "Get my suggestion" }));
+    await screen.findByRole("alert");
+    expect(screen.queryByRole("button", { name: "Save to check-in history" })).not.toBeInTheDocument();
+    expect(onSave).not.toHaveBeenCalled();
+  });
 });
