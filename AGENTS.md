@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- All user data is stored only in browser localStorage via src/lib/store.ts; the app is privacy-first and offline by design.

@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BreatheRouteImport } from './routes/breathe'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as ReflectRouteImport } from './routes/reflect'
+import { Route as RelaxRouteImport } from './routes/relax'
+import { Route as SettingsRouteImport } from './routes/settings'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BreatheRoute = BreatheRouteImport.update({
+  id: '/breathe',
+  path: '/breathe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReflectRoute = ReflectRouteImport.update({
+  id: '/reflect',
+  path: '/reflect',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelaxRoute = RelaxRouteImport.update({
+  id: '/relax',
+  path: '/relax',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/insights': typeof InsightsRoute
+  '/reflect': typeof ReflectRoute
+  '/relax': typeof RelaxRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/insights': typeof InsightsRoute
+  '/reflect': typeof ReflectRoute
+  '/relax': typeof RelaxRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/insights': typeof InsightsRoute
+  '/reflect': typeof ReflectRoute
+  '/relax': typeof RelaxRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/breathe' | '/insights' | '/reflect' | '/relax' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/breathe' | '/insights' | '/reflect' | '/relax' | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/breathe'
+    | '/insights'
+    | '/reflect'
+    | '/relax'
+    | '/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BreatheRoute: typeof BreatheRoute
+  InsightsRoute: typeof InsightsRoute
+  ReflectRoute: typeof ReflectRoute
+  RelaxRoute: typeof RelaxRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/breathe': {
+      id: '/breathe'
+      path: '/breathe'
+      fullPath: '/breathe'
+      preLoaderRoute: typeof BreatheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reflect': {
+      id: '/reflect'
+      path: '/reflect'
+      fullPath: '/reflect'
+      preLoaderRoute: typeof ReflectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relax': {
+      id: '/relax'
+      path: '/relax'
+      fullPath: '/relax'
+      preLoaderRoute: typeof RelaxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BreatheRoute: BreatheRoute,
+  InsightsRoute: InsightsRoute,
+  ReflectRoute: ReflectRoute,
+  RelaxRoute: RelaxRoute,
+  SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
