@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BreatheRouteImport } from './routes/breathe'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ReflectRouteImport } from './routes/reflect'
 import { Route as RelaxRouteImport } from './routes/relax'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const BreatheRoute = BreatheRouteImport.update({
   id: '/breathe',
   path: '/breathe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -50,6 +56,7 @@ const SettingsRoute = SettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/explore': typeof ExploreRoute
   '/insights': typeof InsightsRoute
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/explore': typeof ExploreRoute
   '/insights': typeof InsightsRoute
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/explore': typeof ExploreRoute
   '/insights': typeof InsightsRoute
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
@@ -75,13 +84,27 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/breathe' | '/insights' | '/reflect' | '/relax' | '/settings'
+    | '/'
+    | '/breathe'
+    | '/explore'
+    | '/insights'
+    | '/reflect'
+    | '/relax'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/breathe' | '/insights' | '/reflect' | '/relax' | '/settings'
+  to:
+    | '/'
+    | '/breathe'
+    | '/explore'
+    | '/insights'
+    | '/reflect'
+    | '/relax'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/breathe'
+    | '/explore'
     | '/insights'
     | '/reflect'
     | '/relax'
@@ -91,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BreatheRoute: typeof BreatheRoute
+  ExploreRoute: typeof ExploreRoute
   InsightsRoute: typeof InsightsRoute
   ReflectRoute: typeof ReflectRoute
   RelaxRoute: typeof RelaxRoute
@@ -111,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/breathe'
       fullPath: '/breathe'
       preLoaderRoute: typeof BreatheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -147,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BreatheRoute: BreatheRoute,
+  ExploreRoute: ExploreRoute,
   InsightsRoute: InsightsRoute,
   ReflectRoute: ReflectRoute,
   RelaxRoute: RelaxRoute,
