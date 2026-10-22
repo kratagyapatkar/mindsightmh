@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell, PageTitle } from "@/components/AppShell";
 import { clearAll, exportAll, useName } from "@/lib/store";
+import { Download, FolderDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { savePhoneBackup } from "@/lib/phone-backup";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -20,7 +23,22 @@ export const Route = createFileRoute("/settings")({
 function Settings() {
   const [name, setName] = useName();
   const [draft, setDraft] = useState(name);
+  const [backupStatus, setBackupStatus] = useState("");
+  const [savingBackup, setSavingBackup] = useState(false);
   useEffect(() => setDraft(name), [name]);
+
+  async function saveBackup() {
+    setSavingBackup(true);
+    setBackupStatus("");
+    try {
+      const result = await savePhoneBackup();
+      setBackupStatus(result === "cancelled" ? "Backup cancelled." : result === "shared" ? "Backup handed to your phone’s save or share option." : "Backup download started. Extract the ZIP to get your Mindsight folder.");
+    } catch {
+      setBackupStatus("Could not create the backup. Please try again; your saved data has not changed.");
+    } finally {
+      setSavingBackup(false);
+    }
+  }
 
   return (
     <AppShell>
@@ -43,10 +61,16 @@ function Settings() {
             <li><span className="font-semibold text-primary">Optional AI:</span> only when you agree, your selected mood and optionally your note are sent to Lovable AI to generate guidance. Internet is required. MindSight does not store these requests on its server; AI service processing is separate from on-device storage. Your journal, history and name are never included.</li>
             <li><span className="font-semibold text-primary">Your choice:</span> saving a check-in never sends it to AI. Suggestions are temporary unless you choose to save them to check-in history on this device. Saved suggestions are included in exports and removed when you delete their check-in or erase all data.</li>
             <li><span className="font-semibold text-primary">Private reminders:</span> optional calming-step reminders stay on this device. They appear only inside MindSight while it’s open or when you return after the chosen time, never as device notifications or emails. Cancelling a reminder keeps your saved step.</li>
-            <li><span className="font-semibold text-primary">Deletion:</span> erasing below removes everything from this browser permanently.</li>
+            <li><span className="font-semibold text-primary">Deletion:</span> erasing below removes everything from this browser permanently. Downloaded backups must be deleted separately in your phone’s Files app.</li>
             <li><span className="font-semibold text-primary">Backups:</span> if your browser syncs data or your device backs up browser storage, copies may be included there — that's controlled by your browser and device settings, not by MindSight.</li>
           </ul>
-          <button onClick={exportAll} className="mt-4 w-full rounded-xl bg-card py-3 font-semibold text-primary">Export my data</button>
+          <div className="mt-4 border-t pt-4">
+            <p className="font-semibold text-primary">Mindsight phone backup</p>
+            <p className="mt-2 text-sm text-muted-foreground">All saved data is included in a ZIP containing a Mindsight folder. Save it with your phone’s Files app, then extract it into main storage. Phone browsers cannot create that folder automatically. This is a manual, unencrypted copy; keep it private.</p>
+            <Button onClick={saveBackup} disabled={savingBackup} className="mt-3 w-full"><FolderDown />{savingBackup ? "Preparing backup…" : "Save phone backup"}</Button>
+            <p role="status" className="mt-2 text-sm text-muted-foreground">{backupStatus}</p>
+          </div>
+          <Button onClick={exportAll} variant="secondary" className="mt-4 w-full"><Download />Export my data</Button>
           <button onClick={() => { if (confirm("Erase all your MindSight data from this device? This can't be undone.")) clearAll(); }}
             className="mt-2 w-full rounded-xl py-3 font-semibold text-destructive">Erase all data</button>
         </div>

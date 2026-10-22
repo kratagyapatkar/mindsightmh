@@ -16,3 +16,4 @@
 - Keep reminders as timestamps on local saved calming suggestions and surface due reminders only inside the app; this avoids external notifications, background services, and transmitting private content.
 - Record reminder completion separately from dismissal on the local saved suggestion and reset completion on rescheduling; this makes history reflect explicit completion rather than merely opening or cancelling a reminder.
 - Pin patched transitive security dependencies in package.json overrides when parent packages still allow vulnerable versions; this fixes advisories without unrelated framework upgrades.
+- Generate complete phone backups as client-only ZIP snapshots, delivered through file sharing or download; browser sandbox limits require user-controlled extraction rather than automatic main-storage writes.
