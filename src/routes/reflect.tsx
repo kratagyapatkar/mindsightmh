@@ -32,7 +32,7 @@ function Reflect() {
   const save = () => {
     if (!text.trim()) return;
     setJournal([
-      { id: crypto.randomUUID(), date: new Date().toISOString(), prompt: PROMPTS[i], text: text.trim(), mood: moods.find((m) => m.date === today())?.value },
+      { id: crypto.randomUUID(), date: new Date().toISOString(), prompt: PROMPTS[i] ?? "", text: text.trim(), mood: moods.find((m) => m.date === today())?.value },
       ...journal,
     ]);
     setText("");

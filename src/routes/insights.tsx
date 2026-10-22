@@ -54,7 +54,7 @@ function Insights() {
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
-          <Stat label="Average mood" value={avg !== null ? MOODS[Math.round(avg)] : "—"} />
+          <Stat label="Average mood" value={avg !== null ? (MOODS[Math.round(avg)] ?? "—") : "—"} />
           <Stat label="Check-in streak" value={`${streak} day${streak === 1 ? "" : "s"}`} />
           <Stat label="Mindful minutes" value={String(minutes)} />
           <Stat label="Journal entries" value={String(journal.length)} />
