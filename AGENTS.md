@@ -15,3 +15,4 @@
 - Store explicitly saved, completed AI suggestions inside their local mood entry with original mood context; this keeps history, export, and deletion together without sending saved content back to AI.
 - Keep reminders as timestamps on local saved calming suggestions and surface due reminders only inside the app; this avoids external notifications, background services, and transmitting private content.
 - Record reminder completion separately from dismissal on the local saved suggestion and reset completion on rescheduling; this makes history reflect explicit completion rather than merely opening or cancelling a reminder.
+- Pin patched transitive security dependencies in package.json overrides when parent packages still allow vulnerable versions; this fixes advisories without unrelated framework upgrades.
