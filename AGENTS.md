@@ -9,4 +9,6 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- All user data is stored only in browser localStorage via src/lib/store.ts; the app is privacy-first and offline by design.
+- All saved user data stays in browser localStorage via src/lib/store.ts; core practices remain offline. Optional AI guidance sends only the explicitly consented mood and optional note for processing, never journal/history/name, and does not persist request content on the app server.
+- AI guidance uses a same-origin streaming TanStack HTTP route and server-only AI SDK Responses helpers; this keeps credentials private and allows cancellation and safe error delivery.
+- Persist only operational AI access blocks in a service-role-only table, without user content; this prevents retrying terminal denials across server restarts.

@@ -1,0 +1,3 @@
+- [ ] Add consented mood-and-note AI guidance with streamed results and Stop.
+- [ ] Preserve local-only saved data and update privacy statements.
+- [ ] Test validation, error handling, and live guidance flow.
