@@ -9,6 +9,7 @@ export function MoodSlider() {
   const [tags, setTags] = useState<string[]>(saved?.tags ?? []);
   const [note, setNote] = useState(saved?.note ?? "");
   const [justSaved, setJustSaved] = useState(false);
+  const [tab, setTab] = useState<"mood" | "details">("mood");
 
   // Sync the draft once today's saved entry loads (or changes elsewhere).
   const savedKey = JSON.stringify(saved ?? null);
@@ -38,6 +39,21 @@ export function MoodSlider() {
 
   return (
     <div className="rounded-3xl bg-card px-6 py-8">
+      <div role="tablist" aria-label="Check-in sections" className="mb-6 grid grid-cols-2 gap-1 rounded-2xl bg-surface p-1">
+        {(["mood", "details"] as const).map((t) => (
+          <button
+            key={t}
+            role="tab"
+            aria-selected={tab === t}
+            onClick={() => setTab(t)}
+            className={`rounded-xl py-2 text-sm font-semibold transition ${tab === t ? "bg-primary text-primary-foreground" : "text-primary hover:bg-background"}`}
+          >
+            {t === "mood" ? "Mood" : "Details"}
+          </button>
+        ))}
+      </div>
+
+      {tab === "mood" && (<>
       <p className="text-center font-semibold text-primary">How are you feeling right now?</p>
       <div className="mt-5 flex items-end justify-between" role="radiogroup" aria-label="Mood">
         {MOODS.map((emoji, i) => {
@@ -58,11 +74,21 @@ export function MoodSlider() {
               >
                 {emoji}
               </span>
-              <span className={`mt-2 h-1.5 w-1.5 rounded-full transition ${selected ? "bg-accent" : "bg-transparent"}`} />
             </button>
           );
         })}
       </div>
+      <input
+        type="range"
+        min={0}
+        max={MOODS.length - 1}
+        step={1}
+        value={value}
+        onChange={(e) => setValue(Number(e.target.value))}
+        aria-label="Mood slider"
+        aria-valuetext={MOOD_LABELS[value]}
+        className="mood mt-5 w-full"
+      />
       <div className="mt-1 flex justify-between text-xs text-muted-foreground">
         <span>{MOOD_LABELS[0]}</span>
         <span>{MOOD_LABELS[MOOD_LABELS.length - 1]}</span>
@@ -70,6 +96,10 @@ export function MoodSlider() {
       <p className="mt-3 text-center text-sm font-semibold text-muted-foreground" aria-live="polite">
         {MOODS[value]} {MOOD_LABELS[value]}
       </p>
+      </>)}
+
+      {tab === "details" && (<>
+
 
       <p className="mt-6 text-sm font-semibold text-primary">Anything else in the mix? <span className="font-normal text-muted-foreground">(optional)</span></p>
       <div className="mt-2 flex flex-wrap gap-2">
@@ -117,6 +147,8 @@ export function MoodSlider() {
         placeholder="A few words about today…"
         className="mt-2 w-full resize-none rounded-2xl bg-surface p-4 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
       />
+      </>)}
+
 
       <button
         onClick={save}
