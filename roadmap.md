@@ -6,4 +6,4 @@
 - [x] Add optional local calming-step reminders with scheduling, cancellation, and private due reminders.
 - [x] Verify due timing, persistence, and revisiting a saved step.
 - [x] Mark reminders completed and show completion in history; verify local persistence and dismiss distinction.
-- [ ] Update scan-flagged dependencies and verify the dependency scan and full test suite.
+- [x] Update scan-flagged dependencies and verify the dependency scan and full test suite.
