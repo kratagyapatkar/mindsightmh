@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 // All data lives in this browser only (privacy-first, offline).
-export type SavedGuidance = { id: string; kind: "reflection" | "calming"; text: string; savedAt: string; mood: number };
+export type SavedGuidance = { id: string; kind: "reflection" | "calming"; text: string; savedAt: string; mood: number; reminderAt?: string | undefined };
 export type MoodEntry = { date: string; value: number; energy?: number | undefined; tags?: string[] | undefined; note?: string | undefined; guidance?: SavedGuidance[] | undefined };
 export type JournalEntry = { id: string; date: string; prompt: string; text: string; mood?: number | undefined };
 export type SessionEntry = { date: string; kind: "breathe" | "relax"; minutes: number; practice?: string | undefined; completed?: boolean | undefined };
@@ -76,6 +76,15 @@ export function saveMoodGuidance(list: MoodEntry[], entry: MoodEntry, suggestion
   const guidance = list.find((m) => m.date === entry.date)?.guidance ?? [];
   if (guidance.some((g) => g.id === suggestion.id)) return list;
   return upsertMood(list, { ...entry, guidance: [...guidance, suggestion] });
+}
+
+export function setCalmingReminder(list: MoodEntry[], date: string, id: string, reminderAt?: string, now = Date.now()): MoodEntry[] {
+  if (reminderAt && (!Number.isFinite(Date.parse(reminderAt)) || Date.parse(reminderAt) <= now)) throw new Error("Choose a time in the future.");
+  return list.map((entry) => entry.date !== date ? entry : { ...entry, guidance: entry.guidance?.map((g) => g.id === id && g.kind === "calming" ? { ...g, reminderAt } : g) });
+}
+
+export function dueCalmingReminders(list: MoodEntry[], now = Date.now()) {
+  return list.flatMap((entry) => (entry.guidance ?? []).filter((g) => g.kind === "calming" && g.reminderAt && Date.parse(g.reminderAt) <= now).map((guidance) => ({ date: entry.date, guidance }))).sort((a, b) => Date.parse(a.guidance.reminderAt ?? "") - Date.parse(b.guidance.reminderAt ?? ""));
 }
 
 export function greeting(h = new Date().getHours()) {

@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Bookmark, Leaf, MessageCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppShell, PageTitle } from "@/components/AppShell";
-import { ENERGY_LEVELS, MOODS, MOOD_LABELS, upsertMood, useJournal, useMoods, useSessions } from "@/lib/store";
+import { CalmingReminder } from "@/components/CalmingReminder";
+import { ENERGY_LEVELS, MOODS, MOOD_LABELS, setCalmingReminder, upsertMood, useJournal, useMoods, useSessions } from "@/lib/store";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -124,6 +125,7 @@ function Insights() {
                   </summary>
                   <p className="mt-2 text-xs text-muted-foreground">Saved {new Date(g.savedAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })} · Mood then: {MOOD_LABELS[g.mood]}</p>
                   <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed">{g.text}</p>
+                  {g.kind === "calming" && <CalmingReminder guidance={g} onChange={(time) => setMoods(setCalmingReminder(moods, m.date, g.id, time))} />}
                   <Button variant="ghost" size="sm" className="mt-2 text-destructive" aria-label={`Remove saved ${g.kind === "reflection" ? "reflection prompt" : "calming step"}`} onClick={() => {
                     if (confirm("Remove this saved suggestion? Your check-in will stay.")) setMoods(upsertMood(moods, { ...m, guidance: m.guidance?.filter((item) => item.id !== g.id) }));
                   }}><Trash2 /> Remove</Button>

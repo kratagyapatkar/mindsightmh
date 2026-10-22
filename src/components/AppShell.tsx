@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { Compass, Home, LineChart, Menu, User, X } from "lucide-react";
+import { CalmingReminderNotice } from "@/components/CalmingReminderNotice";
 
 const links = [
   { to: "/", label: "Home" },
@@ -40,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
       )}
-      <main className="flex-1 pb-24">{children}</main>
+      <main className="flex-1 pb-24"><CalmingReminderNotice />{children}</main>
       <footer className="pb-6 pt-4 text-center text-sm text-muted-foreground">Your data stays on your device</footer>
       <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-md border-t bg-card/95 backdrop-blur">
         <div className="grid grid-cols-4">
