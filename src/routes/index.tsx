@@ -8,10 +8,12 @@ import { greeting, useName, useOnboarded } from "@/lib/store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MindSight — Private, offline mindfulness" },
-      { name: "description", content: "Check in with your mood, breathe, reflect and relax. Everything stays on your device." },
-      { property: "og:title", content: "MindSight — Private, offline mindfulness" },
-      { property: "og:description", content: "A calm, privacy-first mental wellness space that works offline." },
+      { title: "MindSight — Mood check-ins and gentle guidance" },
+      { name: "description", content: "Check in, breathe, reflect and relax with on-device storage and optional personalized AI guidance." },
+      { property: "og:title", content: "MindSight — Mood check-ins and gentle guidance" },
+      { property: "og:description", content: "A calm mental wellness space with local-only saved data and optional AI support." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Home,
@@ -31,7 +33,7 @@ function Onboarding({ onDone }: { onDone: () => void }) {
         <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
           <li><span className="font-semibold text-primary">What it is:</span> a quiet place to notice how you feel, then choose a supportive activity — breathing, reflecting or relaxing.</li>
           <li><span className="font-semibold text-primary">What it isn't:</span> a medical or diagnostic tool, and never a replacement for professional care.</li>
-          <li><span className="font-semibold text-primary">Your data:</span> everything you record stays in this browser on this device. No account, no servers, no tracking.</li>
+          <li><span className="font-semibold text-primary">Your data:</span> saved records stay in this browser on this device. Optional AI guidance shares only a selected mood and optional note when you agree. No account is needed.</li>
           <li><span className="font-semibold text-primary">Your pace:</span> everything here is optional. Skip, pause or leave anything at any time.</li>
         </ul>
         <button onClick={onDone} className="mt-6 w-full rounded-2xl bg-primary py-3.5 font-display text-lg font-semibold text-primary-foreground">

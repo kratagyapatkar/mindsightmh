@@ -10,6 +10,8 @@ export const Route = createFileRoute("/breathe")({
       { name: "description", content: "A guided breathing exercise to calm down in minutes." },
       { property: "og:title", content: "Breathe — MindSight" },
       { property: "og:description", content: "Calm down quickly with guided breathing." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Breathe,

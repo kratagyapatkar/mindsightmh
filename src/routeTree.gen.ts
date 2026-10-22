@@ -16,6 +16,7 @@ import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ReflectRouteImport } from './routes/reflect'
 import { Route as RelaxRouteImport } from './routes/relax'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ApiMoodGuidanceRouteImport } from './routes/api/mood-guidance'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMoodGuidanceRoute = ApiMoodGuidanceRouteImport.update({
+  id: '/api/mood-guidance',
+  path: '/api/mood-guidance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
   '/settings': typeof SettingsRoute
+  '/api/mood-guidance': typeof ApiMoodGuidanceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
   '/settings': typeof SettingsRoute
+  '/api/mood-guidance': typeof ApiMoodGuidanceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/reflect': typeof ReflectRoute
   '/relax': typeof RelaxRoute
   '/settings': typeof SettingsRoute
+  '/api/mood-guidance': typeof ApiMoodGuidanceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/reflect'
     | '/relax'
     | '/settings'
+    | '/api/mood-guidance'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/reflect'
     | '/relax'
     | '/settings'
+    | '/api/mood-guidance'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/reflect'
     | '/relax'
     | '/settings'
+    | '/api/mood-guidance'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   ReflectRoute: typeof ReflectRoute
   RelaxRoute: typeof RelaxRoute
   SettingsRoute: typeof SettingsRoute
+  ApiMoodGuidanceRoute: typeof ApiMoodGuidanceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/mood-guidance': {
+      id: '/api/mood-guidance'
+      path: '/api/mood-guidance'
+      fullPath: '/api/mood-guidance'
+      preLoaderRoute: typeof ApiMoodGuidanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReflectRoute: ReflectRoute,
   RelaxRoute: RelaxRoute,
   SettingsRoute: SettingsRoute,
+  ApiMoodGuidanceRoute: ApiMoodGuidanceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

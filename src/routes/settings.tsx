@@ -10,6 +10,8 @@ export const Route = createFileRoute("/settings")({
       { name: "description", content: "Manage your name, your privacy and your private on-device data." },
       { property: "og:title", content: "Settings — MindSight" },
       { property: "og:description", content: "You own your data. Export or erase it anytime." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Settings,
@@ -37,8 +39,9 @@ function Settings() {
           <p className="font-semibold text-primary">Your privacy, in plain words</p>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
             <li><span className="font-semibold text-primary">What's stored:</span> your mood check-ins, journal entries, practice sessions and name.</li>
-            <li><span className="font-semibold text-primary">Where:</span> only in this browser, on this device. There is no account and no server.</li>
-            <li><span className="font-semibold text-primary">What's shared:</span> nothing. Your words and moods are never sent anywhere or used for analytics or ads.</li>
+            <li><span className="font-semibold text-primary">Where:</span> saved check-ins, journals, sessions and your name stay only in this browser, on this device. No account is needed.</li>
+            <li><span className="font-semibold text-primary">Optional AI:</span> only when you agree, your selected mood and optionally your note are sent to Lovable AI to generate guidance. Internet is required. MindSight does not store these requests on its server; AI service processing is separate from on-device storage. Your journal, history and name are never included.</li>
+            <li><span className="font-semibold text-primary">Your choice:</span> saving a check-in never sends it to AI. AI suggestions are temporary and are not saved to your mood history.</li>
             <li><span className="font-semibold text-primary">Deletion:</span> erasing below removes everything from this browser permanently.</li>
             <li><span className="font-semibold text-primary">Backups:</span> if your browser syncs data or your device backs up browser storage, copies may be included there — that's controlled by your browser and device settings, not by MindSight.</li>
           </ul>
