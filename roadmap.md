@@ -3,5 +3,5 @@
 - [x] Test validation, error handling, and live guidance flow.
 - [x] Save completed AI suggestions locally and revisit/remove them in check-in history.
 - [x] Verify persistence, check-in updates, and incomplete-result safeguards.
-- [ ] Add optional local calming-step reminders with scheduling, cancellation, and private due reminders.
-- [ ] Verify due timing, persistence, and revisiting a saved step.
+- [x] Add optional local calming-step reminders with scheduling, cancellation, and private due reminders.
+- [x] Verify due timing, persistence, and revisiting a saved step.
