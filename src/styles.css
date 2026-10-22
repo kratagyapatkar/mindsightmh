@@ -90,6 +90,46 @@
 @utility animate-emoji-bob { animation: emoji-bob 2.4s ease-in-out infinite; }
 @utility animate-emoji-pop { animation: emoji-pop 0.45s ease-out forwards; }
 
+/* Emotion-specific emoji animations */
+@keyframes feel-sob {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  10%, 30%, 50% { transform: translateX(-2px) translateY(1px); }
+  20%, 40%, 60% { transform: translateX(2px) translateY(1px); }
+}
+@keyframes feel-droop {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(4px) rotate(-8deg); }
+}
+@keyframes feel-fidget {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-6deg); }
+  50% { transform: rotate(4deg); }
+  75% { transform: rotate(-3deg); }
+}
+@keyframes feel-shrug {
+  0%, 70%, 100% { transform: translateY(0); }
+  80% { transform: translateY(-3px) scaleX(1.05); }
+  90% { transform: translateY(0); }
+}
+@keyframes feel-sway {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+@keyframes feel-bounce {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  30% { transform: translateY(-8px) scale(0.95, 1.05); }
+  50% { transform: translateY(0) scale(1.08, 0.92); }
+}
+@keyframes feel-party {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  25% { transform: translateY(-8px) rotate(-15deg) scale(1.1); }
+  50% { transform: translateY(0) rotate(0) scale(1); }
+  75% { transform: translateY(-8px) rotate(15deg) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="feel-"] { animation: none !important; }
+}
+
 input[type="range"].mood {
   -webkit-appearance: none; appearance: none; height: 4px; border-radius: 9999px;
   background: var(--calm);
