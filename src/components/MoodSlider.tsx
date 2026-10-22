@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { EMOTION_TAGS, ENERGY_LEVELS, MOODS, MOOD_LABELS, today, upsertMood, useMoods } from "@/lib/store";
 
+// Each mood gets a personality: sob, droop, fidget, shrug, sway, bounce, party.
+const FEEL = ["feel-sob", "feel-droop", "feel-fidget", "feel-shrug", "feel-sway", "feel-bounce", "feel-party"];
+
 export function MoodSlider() {
   const [moods, setMoods] = useMoods();
   const saved = moods.find((m) => m.date === today());
@@ -69,8 +72,8 @@ export function MoodSlider() {
             >
               <span
                 key={selected ? `sel-${value}` : `idle-${i}`}
-                className={`text-3xl transition ${selected ? "animate-emoji-pop" : "animate-emoji-bob opacity-70 hover:opacity-100"}`}
-                style={selected ? undefined : { animationDelay: `${i * 0.18}s` }}
+                className={`inline-block text-3xl transition ${selected ? "scale-125" : "opacity-70 hover:opacity-100"}`}
+                style={{ animation: `${FEEL[i]} ${selected ? 1.1 : 2.6}s ease-in-out ${selected ? 0 : i * 0.15}s infinite` }}
               >
                 {emoji}
               </span>
