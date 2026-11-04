@@ -159,6 +159,7 @@ function Relax() {
               <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
             </button>
           ))}
+          </div>
           <p className="text-center text-xs text-muted-foreground">These practices support relaxation; they don't treat medical conditions.</p>
         </div>
       </AppShell>
