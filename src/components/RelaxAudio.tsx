@@ -8,8 +8,13 @@ export function RelaxAudio({ src, title, autoPlay = false }: { src: string; titl
 
   useEffect(() => {
     const player = audio.current;
+    if (autoPlay && player) {
+      void player.play().catch(() => {
+        // Native controls remain available if the browser blocks autoplay.
+      });
+    }
     return () => { player?.pause(); };
-  }, []);
+  }, [autoPlay]);
 
   return (
     <div>
