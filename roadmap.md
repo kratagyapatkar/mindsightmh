@@ -11,5 +11,5 @@
 - [x] Replace Relax background noise with the four uploaded tracks and verify playback controls.
 - [x] Answer whether Google Cloud can be used.
 - [x] Clarify the other Google Cloud purpose: private journal dictation.
-- [ ] Connect Google Cloud Speech-to-Text for explicitly consented journal dictation.
-- [ ] Add recording, editable transcription, cancellation, local saving, and privacy disclosure; verify the flow.
+- [ ] Connect Google Cloud Speech-to-Text for explicitly consented journal dictation — blocked: connection declined.
+- [ ] Add recording, editable transcription, cancellation, local saving, and privacy disclosure; verify the flow — waiting for Google Cloud connection.
