@@ -64,7 +64,7 @@ function Insights() {
           </div>
           <p className="mt-3 text-xs text-muted-foreground">Faded bars are simply days without a check-in — not missed goals.</p>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           <Stat label="Average mood this week" value={avg !== null ? (MOODS[Math.round(avg)] ?? "—") : "—"} />
           <Stat label="Days checked in" value={`${week.length} / 7`} />
           <Stat label="Mindful minutes" value={String(minutes)} />

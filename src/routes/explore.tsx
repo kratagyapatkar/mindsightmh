@@ -26,10 +26,10 @@ function Explore() {
   return (
     <AppShell>
       <PageTitle title="Explore" sub="Pick a tool and take a moment for yourself." />
-      <div className="space-y-4 px-6">
+      <div className="grid gap-4 px-6 md:grid-cols-3">
         {tools.map(({ to, label, desc, Icon }) => (
           <Link key={to} to={to}
-            className="flex items-center gap-4 rounded-3xl bg-card p-5 transition hover:bg-surface">
+            className="flex items-center gap-4 rounded-3xl bg-card p-5 transition hover:bg-surface md:flex-col md:items-start">
             <Icon className="h-14 w-14 shrink-0 text-primary" />
             <div>
               <p className="font-display text-lg font-semibold text-primary">{label}</p>

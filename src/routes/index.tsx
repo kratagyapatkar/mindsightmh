@@ -57,7 +57,7 @@ function Home() {
         <p className="mt-3 text-muted-foreground">Take a deep breath. You're doing great.</p>
       </div>
       <div className="mt-8 px-6"><MoodSlider /></div>
-      <div className="mt-10 grid grid-cols-3 gap-4 px-6">
+      <div className="mt-10 grid grid-cols-3 gap-4 px-6 md:mx-auto md:max-w-lg">
         {tools.map(({ to, label, Icon }) => (
           <Link key={to} to={to} className="flex flex-col items-center gap-3 rounded-2xl py-3 text-primary transition hover:bg-card">
             <Icon className="h-16 w-16 text-primary" />

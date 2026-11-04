@@ -144,11 +144,12 @@ function Relax() {
     return (
       <AppShell>
         <PageTitle title="Relax" sub="Short guided practices to unwind. Every one can be paused or left at any time." />
-        <div className="space-y-4 px-6">
+        <div className="grid gap-4 px-6">
           <label className="flex items-center justify-between rounded-2xl border bg-surface px-4 py-3">
             <span className="font-semibold text-primary">Soft background sound</span>
             <input type="checkbox" checked={sound} onChange={(e) => setSound(e.target.checked)} className="h-5 w-5 accent-[var(--calm)]" />
           </label>
+          <div className="grid gap-4 md:grid-cols-2">
           {PRACTICES.map((p) => (
             <button key={p.id} onClick={() => begin(p)} className="w-full rounded-3xl bg-card p-5 text-left transition hover:bg-surface">
               <div className="flex items-center justify-between">
@@ -158,6 +159,7 @@ function Relax() {
               <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
             </button>
           ))}
+          </div>
           <p className="text-center text-xs text-muted-foreground">These practices support relaxation; they don't treat medical conditions.</p>
         </div>
       </AppShell>
