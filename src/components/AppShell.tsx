@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
         )}
-        <main className="mx-auto w-full max-w-3xl flex-1 px-0 pb-24 lg:px-10 lg:pb-10">
+        <main className="mx-auto w-full max-w-3xl flex-1 pb-24 lg:pb-10">
           <CalmingReminderNotice />{children}
         </main>
         <footer className="pb-6 pt-4 text-center text-sm text-muted-foreground lg:hidden">Your data stays on your device</footer>
@@ -88,7 +88,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
 export function PageTitle({ title, sub }: { title: string; sub?: string }) {
   return (
-    <div className="px-6 pt-4 pb-6 md:px-10 lg:px-0 lg:pt-10">
+    <div className="px-6 pt-4 pb-6 lg:pt-10">
       <h1 className="text-3xl font-bold text-primary lg:text-4xl">{title}</h1>
       {sub && <p className="mt-2 text-muted-foreground">{sub}</p>}
     </div>
