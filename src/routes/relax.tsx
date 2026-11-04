@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { AppShell, PageTitle } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { RelaxAudio } from "@/components/RelaxAudio";
+import { RelaxScene } from "@/components/RelaxScene";
+import { ArrowLeft, ArrowUpRight, Leaf, ScanLine, Waves, Flower2 } from "lucide-react";
 import groundingMusic from "@/assets/atlasaudio-classical-585264.mp3.asset.json";
 import bodyScanMusic from "@/assets/jumpingbunny-rock-sitar-indian-310861.mp3.asset.json";
 import muscleMusic from "@/assets/leberch-classical-584480.mp3.asset.json";
@@ -89,6 +91,7 @@ const PRACTICES: Practice[] = [
 ];
 
 const minutesOf = (p: Practice) => Math.max(1, Math.round((p.steps.length * p.stepSeconds) / 60));
+const practiceIcons = [Leaf, ScanLine, Waves, Flower2];
 
 function Relax() {
   const [practice, setPractice] = useState<Practice | null>(null);
@@ -127,16 +130,19 @@ function Relax() {
         <PageTitle title="Relax" sub="Short guided practices to unwind. Every one can be paused or left at any time." />
         <div className="grid gap-4 px-6">
           <div className="grid gap-4 md:grid-cols-2">
-          {PRACTICES.map((p) => (
-            <div key={p.id} className="min-w-0 rounded-3xl bg-card p-5">
-              <div className="flex items-center justify-between gap-2">
-                <Button variant="link" onClick={() => begin(p)} className="h-auto whitespace-normal p-0 text-left font-display text-lg font-semibold text-primary">{p.name}</Button>
-                <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-muted-foreground">~{minutesOf(p)} min</span>
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
-              <RelaxAudio src={p.audio} title={p.name} />
-            </div>
-          ))}
+          {PRACTICES.map((p, index) => {
+            const Icon = practiceIcons[index] ?? Leaf;
+            return (
+              <Button key={p.id} variant="ghost" onClick={() => begin(p)} aria-label={`Start ${p.name}`} className="h-auto min-w-0 flex-col items-start gap-4 whitespace-normal rounded-3xl bg-card p-5 text-left hover:bg-secondary">
+                <span className="flex w-full items-center justify-between gap-2">
+                  <Icon className="size-6 text-primary" />
+                  <span className="text-xs font-semibold text-muted-foreground">~{minutesOf(p)} min</span>
+                </span>
+                <span className="flex w-full items-center justify-between gap-2 font-display text-lg font-semibold text-primary">{p.name}<ArrowUpRight /></span>
+                <span className="text-sm font-normal text-muted-foreground">{p.desc}</span>
+              </Button>
+            );
+          })}
           </div>
           <p className="text-center text-xs text-muted-foreground">These practices support relaxation; they don't treat medical conditions.</p>
         </div>
@@ -146,10 +152,12 @@ function Relax() {
 
   return (
     <AppShell>
+      <div className="px-6 pt-5"><Button variant="ghost" onClick={exit} className="gap-2"><ArrowLeft /> All practices</Button></div>
       <PageTitle title={practice.name} sub="One step at a time. Skip anything that doesn't feel right." />
+      {!done && <RelaxScene key={practice.id} title={practice.name} />}
       <div className="px-6">
-        {!done && <div className="mb-4"><RelaxAudio key={practice.id} src={practice.audio} title={practice.name} /></div>}
-        <div className="flex min-h-56 flex-col items-center justify-center rounded-3xl bg-card p-8 text-center">
+        {!done && <div className="mb-4"><RelaxAudio key={practice.id} src={practice.audio} title={practice.name} autoPlay /></div>}
+        <div className="flex min-h-40 flex-col items-center justify-center py-6 text-center">
           {done ? (
             <>
               <p className="text-4xl">🌿</p>

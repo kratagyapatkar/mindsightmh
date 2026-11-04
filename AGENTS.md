@@ -18,4 +18,4 @@
 - Pin patched transitive security dependencies in package.json overrides when parent packages still allow vulnerable versions; this fixes advisories without unrelated framework upgrades.
 - Generate complete phone backups as client-only ZIP snapshots, delivered through file sharing or download; browser sandbox limits require user-controlled extraction rather than automatic main-storage writes.
 - AppShell is responsive: bottom tab bar plus hamburger below lg, a left sidebar at lg with content centered in a max-w-3xl column; page grids expand at md/lg so larger screens are not a stretched phone column.
-- Relax music uses uploaded CDN asset pointers and native audio controls with single-track playback; guided practices remain usable without fetching music.
+- Relax cards open a practice screen with a reduced-motion-aware landscape scene; uploaded CDN tracks autoplay only after selection, using native audio controls and stopping on exit so guided practices stay usable without music.

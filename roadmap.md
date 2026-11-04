@@ -9,6 +9,7 @@
 - [x] Update scan-flagged dependencies and verify the dependency scan and full test suite.
 - [x] Add private full phone backup with a Mindsight folder and verify archive contents and download.
 - [x] Replace Relax background noise with the four uploaded tracks and verify playback controls.
+- [x] Make entire Relax cards open an animated calming screen with automatic music and verify all four tracks.
 - [x] Answer whether Google Cloud can be used.
 - [x] Clarify the other Google Cloud purpose: private journal dictation.
 - [ ] Connect Google Cloud Speech-to-Text for explicitly consented journal dictation — blocked: connection declined.
