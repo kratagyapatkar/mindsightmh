@@ -8,3 +8,6 @@
 - [x] Mark reminders completed and show completion in history; verify local persistence and dismiss distinction.
 - [x] Update scan-flagged dependencies and verify the dependency scan and full test suite.
 - [x] Add private full phone backup with a Mindsight folder and verify archive contents and download.
+- [x] Replace Relax background noise with the four uploaded tracks and verify playback controls.
+- [x] Answer whether Google Cloud can be used.
+- [ ] Clarify the other Google Cloud purpose; waiting for the user's intended task.
